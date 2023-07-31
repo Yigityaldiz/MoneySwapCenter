@@ -7,7 +7,7 @@ function App() {
   const [value, setValue] = useState(null);
   const[selectTo,setSelectTo] = useState(null);
   const[selectFrom,setSelectFrom] = useState(null);
-  const[result,setResult] = useState(null);
+  const[result,setResult] = useState({});
 
   useEffect(() => {
     fetch("https://api.exchangerate.host/latest")
@@ -18,10 +18,10 @@ function App() {
 
   const sendRequest = (e) => {
     fetch(
-       `https://api.exchangerate.host/latest?BASE=${selectFrom}&symbols=${selectTo}&${value}=1`
+       `https://api.exchangerate.host/latest?BASE=${selectFrom}&symbols=${selectTo}&amount=${value}`
     )
     .then((response) => response.json())
-    .then((data) => setResult(Object.keys(data.rates)))
+    .then((data) => setResult(data.rates))
     .catch((err)=>(console.log(err)))
     console.log(result)
       
@@ -50,13 +50,13 @@ function App() {
 
         <input type="number" onChange={handleChange}></input>
 
-        <select onChange={handleSelectTo}>
+        <select onChange={handleSelectFrom}>
           {exchangeRate?.map((exh,i) => (
             <option key={i}>{exh}</option>
           ))}
         </select>
 
-        <select onChange={handleSelectFrom}>
+        <select onChange={handleSelectTo}>
           {exchangeRate?.map((exh, i) => (
             <option key={i}>{exh}</option>
           ))}
@@ -66,7 +66,7 @@ function App() {
           Changee
         </button>
         <div>
-         {result}
+         {result[selectTo]}
         </div>
         
 
