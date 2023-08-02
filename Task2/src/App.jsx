@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import "./index.css";
 import "./App.css";
+import Select from "./components/select";
 
 function App() {
   const [exchangeRate, setExchangeRate] = useState(null);
@@ -22,7 +23,7 @@ function App() {
       .then((response) => response.json())
       .then((data) => setResult(data.rates))
       .catch((err) => console.log(err));
-    console.log(result);
+    
   };
 
   const handleChange = (e) => {
@@ -31,6 +32,7 @@ function App() {
 
   const handleSelectTo = (e) => {
     setSelectTo(e.target.value);
+    console.log(selectTo)
   };
   const handleSelectFrom = (e) => {
     setSelectFrom(e.target.value);
@@ -44,20 +46,10 @@ function App() {
             <input  type="number" onChange={handleChange}></input>
           </div>
 
-          <div >
-            <select  onChange={handleSelectFrom}>
-              {exchangeRate?.map((exh, i) => (
-                <option key={i}>{exh}</option>
-              ))}
-            </select>
-          </div>
+          <Select  onChange={handleSelectFrom} options = {exchangeRate} />
 
           <div>
-            <select onChange={handleSelectTo}>
-              {exchangeRate?.map((exh, i) => (
-                <option key={i}>{exh}</option>
-              ))}
-            </select>
+          <Select  onChange={handleSelectTo} options = {exchangeRate} />
           </div>
 
           <div className="rounded-lg" >
@@ -68,6 +60,7 @@ function App() {
 
          
         </form>
+        
         <div className="">{result[selectTo]}</div>
       </div>
     </div>
