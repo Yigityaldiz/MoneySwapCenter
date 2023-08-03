@@ -3,25 +3,29 @@ import "./index.css";
 import "./App.css";
 import Select from "./components/select";
 import  axios  from 'axios';
+import  { fetchData } from "./api/getCurrencies";
+
+
+
 
 
 function App() {
-  const [exchangeRate, setExchangeRate] = useState(null);
+ 
   const [value, setValue] = useState(null);
   const [selectTo, setSelectTo] = useState(null);
   const [selectFrom, setSelectFrom] = useState(null);
   const [result, setResult] = useState({});
-  const baseURL = "https://api.exchangerate.host/latest";
-  const sendRequestUrl = `https://api.exchangerate.host/latest?BASE=${selectFrom}&symbols=${selectTo}&amount=${value}`
+  const [exchangeRate, setExchangeRate] = useState(null);
+  
+  const sendRequestUrl = `https://api.exchangerate.host/latest?BASE=${selectFrom}&symbols=${selectTo}&amount=${value}` ;
  
 
   useEffect(() => {
    
-   axios.get(baseURL)
-   .then((res) => setExchangeRate( Object.keys(res.data.rates)  )) //object key kullanmayip usestate e [] verince olmadi sor 
-   .catch((err) => console.log(err))
-   
+   fetchData().then( async(data)=> await  setExchangeRate(Object.keys(data))  )
+ 
   }, []);
+  
 
   const sendRequest = (e) => {
     axios.get(sendRequestUrl)
@@ -47,7 +51,7 @@ function App() {
         <form className="flex justify-center space-x-10 ">
           <div className="caret-blue-500 focus:caret-indigo-500">
             <label htmlFor="">Amount:</label>
-            <input type="number" onChange={handleChange} ></input>
+            <input type="number" onChange={handleChange} className="border-solid  rounded-lg border-2" ></input>
           </div>
 
           <Select onChange={handleSelectFrom} options={exchangeRate} label={"From:"} />
@@ -56,7 +60,7 @@ function App() {
 
           <div className="rounded-lg">
             <button
-              className=" border rounded-lg button lg-4 flex item-center"
+              className=" border-solid rounded-lg border-white border-2 "
               type="button"
               onClick={sendRequest}
             >
@@ -64,7 +68,7 @@ function App() {
             </button>
           </div>
            
-          <div label="asdss" className="">{result[selectTo]}</div>
+          <div className="">{result[selectTo]}</div>
         </form>
 
        
