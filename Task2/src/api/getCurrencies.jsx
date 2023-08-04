@@ -1,11 +1,15 @@
 import axios from "axios";
  
-export  const  fetchData = ()=>{
-    const baseURL =  "https://api.exchangerate.host/latest";
+export const API = axios.create({
+    baseURL :  "https://api.exchangerate.host/latest"
+})
+
+export  const  fetchData = async ()=>{
+    const endpoint = "/";
 
     return (
-        axios.get(baseURL)
-        .then(res => res.data.rates )
+       await API.get(endpoint)
+        .then(res =>  res.data.rates )
         .catch(err => console.log(err,"fethData da hata var "))
         
     )
@@ -15,12 +19,10 @@ export  const  fetchData = ()=>{
 
     export const sendRequest = (selectFrom,selectTo,value) => {
 
-        const sendRequestUrl = `https://api.exchangerate.host/latest?BASE=${selectFrom}&symbols=${selectTo}&amount=${value}`;
+        const endpoint = `?BASE=${selectFrom}&symbols=${selectTo}&amount=${value} `;
 
         return(
-            axios.get(sendRequestUrl)
-            .then((res) => setResult(res.data.rates))
-            .catch((err) =>console.log(err))
+            API.get(endpoint)
         )
 
        
